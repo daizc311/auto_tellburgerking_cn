@@ -83,28 +83,5 @@ except TimeoutException as e:
 except Exception as e:
     logging.exception("异常")
 
-    # logger = logging.getLogger('mylogger')
-    # logger.setLevel(logging.ERROR)
-    #
-    # # 创建一个handler，用于写入日志文件
-    # fh = logging.FileHandler(os.path.join(os.getcwd(), 'log.txt'))
-    # fh.setLevel(logging.DEBUG)
-    #
-    # # 再创建一个handler，用于输出到控制台
-    # ch = logging.StreamHandler()
-    # ch.setLevel(logging.DEBUG)
-    #
-    # # 定义handler的输出格式
-    # formatter = logging.Formatter('%(asctime)s - %(module)s.%(funcName)s.%(lineno)d - %(levelname)s - %(message)s')
-    # fh.setFormatter(formatter)
-    # ch.setFormatter(formatter)
-    #
-    # # 给logger添加handler
-    # logger.addHandler(fh)
-    # logger.addHandler(ch)
-    #
-    # logger.error(e)
-
-
 finally:
     driver.close()
