@@ -11,3 +11,6 @@ https://sites.google.com/a/chromium.org/chromedriver/downloads
 1. 在main.py中修改BASE_CODE为自己的调查码
 2. 运行脚本
 3. 查看结果文件
+
+-[x] ~~看看怎么部署成web服务~~ 太麻烦了，已放弃
+-[ ] 试试能不能用Cookie的方式直接请求结果
