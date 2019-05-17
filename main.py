@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 
 from selenium import webdriver
@@ -15,10 +16,17 @@ from util import LogUtil
 
 BASE_URL: str = "https://tellburgerking.com.cn/"
 # TODO 调查码应该在文件中读取或者以参数传递
-BASE_CODE: str = "9977232200950159"
+BASE_CODE: str = "997723220095015AAA9"
 log1 = LogUtil.LogHelper()
 
-# TODO 此处应该先校验调查码的长度、形态是否合法，并且修正格式
+# 校验调查码的长度、形态是否合法，并且修正格式
+if not BASE_CODE.isdigit():
+    logging.error("请输入正确的调查码")
+    sys.exit()
+BASE_CODE = BASE_CODE.strip()
+if len(BASE_CODE) != 16:
+    logging.error("请输入16位调查码")
+    sys.exit()
 
 options = webdriver.ChromeOptions()
 # 静默模式 无图模式
@@ -35,7 +43,6 @@ def waiting_for_loading():
     WebDriverWait(driver, 15).until(EC.title_contains("BK"))
     logging.INFO("当前页面标题：" + driver.title)
     return "谢谢" in driver.title
-    # WebDriverWait(driver, 15).until(EC.element_selection_state_to_be((By.ID, idStr)))
 
 
 try:
