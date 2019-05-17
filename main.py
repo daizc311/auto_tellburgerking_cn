@@ -14,12 +14,17 @@ from selenium.webdriver.support.wait import WebDriverWait
 from util import LogUtil
 
 BASE_URL: str = "https://tellburgerking.com.cn/"
+# TODO 调查码应该在文件中读取或者以参数传递
 BASE_CODE: str = "9977232200950159"
 log1 = LogUtil.LogHelper()
 
+# TODO 此处应该先校验调查码的长度、形态是否合法，并且修正格式
+
 options = webdriver.ChromeOptions()
-# prefs = {'profile.managed_default_content_settings.images': 2}
-# options.add_experimental_option('prefs', prefs)
+# 静默模式 无图模式
+prefs = {'profile.managed_default_content_settings.images': 2}
+options.add_experimental_option('prefs', prefs)
+options.add_argument("--headless")
 driver = webdriver.Chrome(options=options)
 
 
@@ -28,6 +33,7 @@ def next_page(): driver.find_element_by_id("NextButton").click()
 
 def waiting_for_loading():
     WebDriverWait(driver, 15).until(EC.title_contains("BK"))
+    logging.INFO("当前页面标题：" + driver.title)
     return "谢谢" in driver.title
     # WebDriverWait(driver, 15).until(EC.element_selection_state_to_be((By.ID, idStr)))
 
@@ -35,7 +41,6 @@ def waiting_for_loading():
 try:
     # 第一个页面
     driver.get(BASE_URL)
-    # log1.debug("666")
 
     waiting_for_loading()
     next_page()
@@ -45,6 +50,7 @@ try:
     for num in range(0, 6):
         driver.find_element_by_id("CN" + str(num + 1)).send_keys(BASE_CODE[3 * num:3 * num + 3])
 
+    # TODO 此处应该根据页面提示语校验调查码是否有效
     next_page()
 
     # 调查页面
@@ -55,12 +61,12 @@ try:
             WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "radioSimpleInput")))
             for elem in driver.find_elements_by_class_name("radioSimpleInput")[::-1]: elem.click()
         except TimeoutException as e:
-            logging.error("本页没有单选框")
+            logging.debug("本页没有单选框")
         try:
             WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "checkboxSimpleInput")))
             driver.find_elements_by_class_name("checkboxSimpleInput")[-1].click()
         except TimeoutException as e:
-            logging.error("本页没有复选框")
+            logging.debug("本页没有复选框")
         try:
             WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.TAG_NAME, "select")))
             for selectEle in driver.find_elements_by_tag_name("select"):
@@ -68,7 +74,7 @@ try:
                 answer = select.options[-1].text
                 select.select_by_visible_text(answer)
         except TimeoutException as e:
-            logging.error("本页没有选择框")
+            logging.debug("本页没有选择框")
         next_page()
 
     # 获取结果
