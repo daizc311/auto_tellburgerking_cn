@@ -41,7 +41,7 @@ def next_page(): driver.find_element_by_id("NextButton").click()
 
 def waiting_for_loading():
     WebDriverWait(driver, 15).until(EC.title_contains("BK"))
-    logging.INFO("当前页面标题：" + driver.title)
+    logging.info("当前页面标题：" + driver.title)
     return "谢谢" in driver.title
 
 
